@@ -3,3 +3,4 @@ https://snapcraft.io/whatsapp-electron
 
 1. Install whatsapp
 2. Verify your Phone number
+3. When sharing the video make sure you set it to HD
