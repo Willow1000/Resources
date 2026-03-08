@@ -1,0 +1,5 @@
+Whatsapp download link for Linux:
+https://snapcraft.io/whatsapp-electron
+
+1. Install whatsapp
+2. Verify your Phone number
