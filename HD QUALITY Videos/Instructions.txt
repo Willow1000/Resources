@@ -1,6 +1,58 @@
-Whatsapp download link for Linux:
-https://snapcraft.io/whatsapp-electron
+WhatsApp for Linux & Windows – Installation Guide
 
-1. Install whatsapp
-2. Verify your Phone number
-3. When sharing the video make sure you set it to HD
+You can use WhatsApp on your computer to send messages, documents, images, and videos directly from your desktop.
+
+LINUX DOWNLOAD
+
+You can install WhatsApp on Linux using the Electron desktop wrapper available on Snapcraft.
+
+Download link:
+[https://snapcraft.io/whatsapp-electron](https://snapcraft.io/whatsapp-electron)
+
+Linux Installation Steps
+
+1. Open the download link above in your browser.
+2. Make sure Snap is installed on your Linux system.
+3. Install WhatsApp using the terminal command:
+   sudo snap install whatsapp-electron
+4. After installation, open the app from your applications menu or run:
+   whatsapp-electron
+
+WINDOWS DOWNLOAD
+
+You can install the official WhatsApp Desktop application for Windows or download it directly from the microsoft store
+
+Download link:
+[https://www.whatsapp.com/download](https://www.whatsapp.com/download)
+
+Windows Installation Steps
+
+1. Open the download page above.
+2. Download the Windows version of WhatsApp Desktop.
+3. Run the installer and complete the installation.
+4. Launch WhatsApp Desktop after installation.
+
+LINK YOUR WHATSAPP ACCOUNT (Linux & Windows)
+
+1. When the app opens, a QR code will appear on the screen.
+2. Open WhatsApp on your phone.
+3. Go to Settings → Linked Devices.
+4. Tap “Link a Device”.
+5. Scan the QR code displayed on your computer.
+
+Your chats will automatically sync to the desktop application.
+
+SENDING VIDEOS
+
+When sharing videos through WhatsApp:
+
+* Select the video file from your computer.
+* Enable HD quality before sending to preserve better resolution.
+* If you want to avoid compression completely, send the video as a document/file instead of a normal video.
+
+NOTES
+
+* Your phone must stay connected to the internet for proper synchronization.
+* The desktop application works similarly to WhatsApp Web and mirrors your mobile account.
+* You can send messages, images, videos, documents, and voice notes directly from your computer.
+
