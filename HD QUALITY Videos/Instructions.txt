@@ -1,58 +1,106 @@
-WhatsApp for Linux & Windows – Installation Guide
+WhatsApp for Linux & Windows – Installation and Setup Guide
 
-You can use WhatsApp on your computer to send messages, documents, images, and videos directly from your desktop.
+You can use WhatsApp on your computer to send messages, share files, and manage conversations more easily while working. The desktop version allows you to send and receive messages, images, videos, and documents directly from your computer while keeping everything synchronized with your phone.
+
+Below are the instructions for installing and setting up WhatsApp on both Linux and Windows systems.
+
+---
 
 LINUX DOWNLOAD
 
-You can install WhatsApp on Linux using the Electron desktop wrapper available on Snapcraft.
+WhatsApp does not currently provide an official native Linux desktop application. However, you can use a reliable desktop wrapper called WhatsApp Electron, which runs WhatsApp Web inside a dedicated desktop app.
 
 Download link:
 [https://snapcraft.io/whatsapp-electron](https://snapcraft.io/whatsapp-electron)
 
 Linux Installation Steps
 
-1. Open the download link above in your browser.
-2. Make sure Snap is installed on your Linux system.
-3. Install WhatsApp using the terminal command:
-   sudo snap install whatsapp-electron
-4. After installation, open the app from your applications menu or run:
-   whatsapp-electron
+1. Open the download link above in your web browser.
+2. Ensure that Snap is installed on your Linux system. Snap is a package manager used by many Linux distributions to install applications easily.
+3. Open your terminal and install the application using the following command:
+
+sudo snap install whatsapp-electron
+
+4. Wait for the installation to complete.
+5. Once installed, open the application from your applications menu or start it from the terminal by running:
+
+whatsapp-electron
+
+After launching the application, a QR code will appear which you will use to link your WhatsApp account.
+
+---
 
 WINDOWS DOWNLOAD
 
-You can install the official WhatsApp Desktop application for Windows or download it directly from the microsoft store
+Windows users can install the official WhatsApp Desktop application provided by WhatsApp.
 
 Download link:
 [https://www.whatsapp.com/download](https://www.whatsapp.com/download)
 
 Windows Installation Steps
 
-1. Open the download page above.
-2. Download the Windows version of WhatsApp Desktop.
-3. Run the installer and complete the installation.
-4. Launch WhatsApp Desktop after installation.
+1. Open the download page using the link above.
+2. Download the WhatsApp Desktop for Windows installer.
+3. Run the downloaded installer file.
+4. Follow the installation prompts to complete the setup.
+5. Once installed, open WhatsApp Desktop from your Start Menu or desktop shortcut.
+
+When the application starts, it will display a QR code that you must scan using your phone to link your account.
+
+---
 
 LINK YOUR WHATSAPP ACCOUNT (Linux & Windows)
 
-1. When the app opens, a QR code will appear on the screen.
-2. Open WhatsApp on your phone.
-3. Go to Settings → Linked Devices.
-4. Tap “Link a Device”.
-5. Scan the QR code displayed on your computer.
+After installing the application on your computer, you must link it with your mobile WhatsApp account.
 
-Your chats will automatically sync to the desktop application.
+Follow these steps:
 
-SENDING VIDEOS
+1. Open the WhatsApp application on your phone.
+2. Tap Settings.
+3. Select Linked Devices.
+4. Tap Link a Device.
+5. Your phone camera will open to scan a QR code.
+6. Point your camera at the QR code displayed on your computer screen.
 
-When sharing videos through WhatsApp:
+Once scanned, your chats, contacts, and recent messages will automatically synchronize with your desktop application.
 
-* Select the video file from your computer.
-* Enable HD quality before sending to preserve better resolution.
-* If you want to avoid compression completely, send the video as a document/file instead of a normal video.
+---
 
-NOTES
+IMPORTANT SETTINGS – IMAGE AND VIDEO QUALITY
 
-* Your phone must stay connected to the internet for proper synchronization.
-* The desktop application works similarly to WhatsApp Web and mirrors your mobile account.
-* You can send messages, images, videos, documents, and voice notes directly from your computer.
+Before sharing any images or videos, it is recommended that you configure WhatsApp to send media in HD quality. This helps preserve better image and video clarity during sharing.
+
+To enable this setting:
+
+1. Open WhatsApp on your phone.
+2. Go to Settings.
+3. Tap Storage and Data.
+4. Locate the Media Upload Quality option.
+5. Select HD Quality.
+
+This ensures that media files maintain higher resolution when they are sent.
+
+---
+
+SENDING VIDEOS OR IMAGES
+
+When sharing media files from your computer:
+
+1. Click the attach file (paperclip) icon in the chat window.
+2. Select the image or video file you want to send.
+3. If the HD option appears, make sure it is enabled before sending the file.
+4. Confirm and send the media.
+
+If you want to avoid compression completely, you can send the file as a document instead of a normal image or video. Sending as a document preserves the original file size and quality.
+
+---
+
+ADDITIONAL NOTES
+
+* Your phone should remain connected to the internet for proper synchronization with the desktop application.
+* The desktop version mirrors your mobile WhatsApp account and displays the same conversations.
+* You can send text messages, images, videos, documents, and voice notes directly from your computer.
+* Using WhatsApp on a computer can make file sharing easier and allows faster typing when handling longer conversations.
+
+This setup allows you to comfortably manage WhatsApp communication from your computer without constantly switching back to your phone.
 
