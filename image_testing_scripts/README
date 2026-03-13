@@ -1,0 +1,76 @@
+This script runs within the action folder. i.e superheat,highalch...
+
+## **Setup**
+
+1. **Set the environment variable in the workflow**
+   The action must have access to the tooling folder:
+
+   ```bash
+   export path_containing_LocallyAvailableTooling=/path/to/tooling
+   ```
+
+2. **Ensure your JSON mappings exist** (`image_mappings.json`):
+
+   ```json
+   {
+       "tests": {
+           "13": "13.png",
+           "14": "14.png",
+           "15": "15.png"
+       },
+       "icons": {
+           "A": "A.png",
+           "B": "B.png",
+           "C": "C.png",
+           "V": "V.png"
+       }
+   }
+   ```
+
+3. **Tooling folder structure**
+
+   ```
+   $path_containing_LocallyAvailableTooling/LocallyAvailableActionTooling/
+       compare_specific_image_list_to_other_base_image.py
+   ```
+
+---
+
+
+
+The action calls the script with a **multi-test string**:
+
+```bash
+python run_test.py "13:V 14:A,B 15:C"
+```
+
+* `"13:V"` → Test ID 13 with icon V
+* `"14:A,B"` → Test ID 14 with icons A and B
+* `"15:C"` → Test ID 15 with icon C
+
+The script **runs automatically within the action** and outputs results directly to the workflow logs.
+
+---
+
+## **Example Workflow Log Output**
+
+```text
+Test 13: Base image '13.png' with icons ['V.png'] → PASS
+Test 14: Base image '14.png' with icons ['A.png', 'B.png'] → FAIL
+Test 15: Base image '15.png' with icons ['C.png'] → PASS
+```
+
+* One line per test
+* PASS/FAIL reflects the result across all icons in the test
+* No redundant metrics per icon
+
+---
+
+## **Script Flow**
+
+1. Parse the multi-test string (`"13:V 14:A,B 15:C"`) into test IDs and associated icons.
+2. Load JSON mappings to resolve filenames.
+3. Internally run `compare_icon_to_image_list` for each icon/base combination.
+4. Print a **concise summary** per test to the action log.
+
+---
