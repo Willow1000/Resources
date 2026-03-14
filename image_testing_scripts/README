@@ -1,76 +1,510 @@
-This script runs within the action folder. i.e superheat,highalch...
+# Image Comparison Test Toolkit
 
-## **Setup**
+# Note
+Ensure you add mappings folder to the .gitignore file to avoid unneccessary commits of the mappings files
 
-1. **Set the environment variable in the workflow**
-   The action must have access to the tooling folder:
+## Overview
 
-   ```bash
-   export path_containing_LocallyAvailableTooling=/path/to/tooling
-   ```
+This toolkit contains two Python scripts designed to automate **visual verification of action icons inside test screenshots**.
+It is primarily used inside automated action workflows (for example inside a Superheat action pipeline) to confirm that expected icons appear in specific screenshots.
 
-2. **Ensure your JSON mappings exist** (`image_mappings.json`):
+The toolkit consists of two main components:
 
-   ```json
-   {
-       "tests": {
-           "13": "13.png",
-           "14": "14.png",
-           "15": "15.png"
-       },
-       "icons": {
-           "A": "A.png",
-           "B": "B.png",
-           "C": "C.png",
-           "V": "V.png"
-       }
-   }
-   ```
+1. **Mapping Generator Script**
+   Builds a JSON mapping between test screenshots and action icons.
 
-3. **Tooling folder structure**
+2. **Interactive Test Runner Script**
+   Executes visual comparisons between icons and screenshots using the generated mapping.
 
-   ```
-   $path_containing_LocallyAvailableTooling/LocallyAvailableActionTooling/
-       compare_specific_image_list_to_other_base_image.py
-   ```
+The workflow allows engineers to run **multiple visual tests quickly and consistently** without manually specifying file paths.
 
 ---
 
+# Directory Structure
 
+The scripts assume the following directory layout:
 
-The action calls the script with a **multi-test string**:
-
-```bash
-python run_test.py "13:V 14:A,B 15:C"
+```
+project_root/
+│
+├─ commons/
+│   └─ all_<action_name>/
+│       └─ all_action_files/
+│           └─ screenshots/
+│               ├─ action/
+│               │   ├─ icon1.png
+│               │   ├─ icon2.png
+│               │   └─ ...
+│               │
+│               └─ test/
+│                   ├─ test1.png
+│                   ├─ test2.png
+│                   └─ ...
+│
+├─ <action_name>/
+│   └─ all_action_files/
+│       └─ screenshots/
+│           ├─ action/
+│           └─ test/
+│
+├─ mappings/
+│   └─ *.json
+│
+├─ generate_mappings.py
+└─ run_test.py
 ```
 
-* `"13:V"` → Test ID 13 with icon V
-* `"14:A,B"` → Test ID 14 with icons A and B
-* `"15:C"` → Test ID 15 with icon C
-
-The script **runs automatically within the action** and outputs results directly to the workflow logs.
-
 ---
 
-## **Example Workflow Log Output**
+# External Dependency
 
-```text
-Test 13: Base image '13.png' with icons ['V.png'] → PASS
-Test 14: Base image '14.png' with icons ['A.png', 'B.png'] → FAIL
-Test 15: Base image '15.png' with icons ['C.png'] → PASS
+The test runner depends on a comparison function located in a separate tooling repository.
+
+Environment variable required:
+
+```
+path_containing_LocallyAvailableTooling
 ```
 
-* One line per test
-* PASS/FAIL reflects the result across all icons in the test
-* No redundant metrics per icon
+Example:
+
+```
+export path_containing_LocallyAvailableTooling=/home/user/tooling_repo
+```
+
+Expected structure inside that path:
+
+```
+LocallyAvailableActionTooling/
+    compare_specific_image_list_to_other_base_image.py
+```
+
+The runner imports the function:
+
+```
+compare_icon_to_image_list()
+```
+
+This function performs the actual image comparison.
 
 ---
 
-## **Script Flow**
+# Script 1: Mapping Generator
 
-1. Parse the multi-test string (`"13:V 14:A,B 15:C"`) into test IDs and associated icons.
-2. Load JSON mappings to resolve filenames.
-3. Internally run `compare_icon_to_image_list` for each icon/base combination.
-4. Print a **concise summary** per test to the action log.
+## Purpose
+
+The mapping generator scans screenshot folders and creates a **JSON reference file** that assigns:
+
+* letters → action icons
+* numbers → test screenshots
+
+This simplifies test execution because testers can refer to icons using short labels rather than file paths.
 
 ---
+
+## Running the Script
+
+```
+python generate_mappings.py
+```
+
+The script will prompt for an action name:
+
+```
+Enter action name:
+```
+
+Example:
+
+```
+superheat
+```
+
+or
+
+```
+all_superheat
+```
+
+---
+
+## Mapping Rules
+
+### Icon Mapping
+
+Icons located in:
+
+```
+screenshots/action/
+```
+
+are assigned alphabetical labels:
+
+```
+A
+B
+C
+...
+```
+
+Example:
+
+```
+A -> action/icon1.png
+B -> action/icon2.png
+```
+
+---
+
+### Test Screenshot Mapping
+
+Images inside:
+
+```
+screenshots/test/
+```
+
+are assigned numeric identifiers:
+
+```
+1
+2
+3
+...
+```
+
+Example:
+
+```
+1 -> test/test1.png
+2 -> test/test2.png
+```
+
+---
+
+## Output
+
+The script generates a mapping file inside the `mappings` directory.
+
+Example:
+
+```
+mappings/superheat.json
+```
+
+Example JSON structure:
+
+```
+{
+    "icons": {
+        "A": "superheat/all_action_files/screenshots/action/icon1.png",
+        "B": "superheat/all_action_files/screenshots/action/icon2.png"
+    },
+    "tests": {
+        "1": "superheat/all_action_files/screenshots/test/test1.png",
+        "2": "superheat/all_action_files/screenshots/test/test2.png"
+    }
+}
+```
+
+If a mapping already exists for the same action, it is replaced automatically.
+
+---
+
+# Script 2: Interactive Test Runner
+
+## Purpose
+
+The test runner allows engineers to perform **visual comparisons interactively** from the terminal.
+
+Multiple tests can be executed without restarting the script.
+
+It supports:
+
+* switching between actions
+* running multiple comparisons
+* clearing the terminal
+* exiting the runner
+
+---
+
+## Running the Runner
+
+```
+python run_test.py
+```
+
+---
+
+# Runner Commands
+
+### Select Action
+
+When the runner starts, it asks for an action:
+
+```
+Enter action name (or type 'clear' / 'exit'):
+```
+
+Example:
+
+```
+superheat
+```
+
+The runner loads:
+
+```
+mappings/superheat.json
+```
+
+---
+
+### Execute Tests
+
+After selecting an action, enter test commands.
+
+Example:
+
+```
+13:V
+```
+
+Meaning:
+
+```
+Compare icon V with test image 13
+```
+
+---
+
+### Multiple Icons
+
+```
+14:A,B
+```
+
+Meaning:
+
+```
+Compare icon A and icon B against test image 14
+```
+
+---
+
+### Multiple Tests
+
+```
+13:V 14:A,B 15:C
+```
+
+Runs three tests sequentially.
+
+---
+
+### Example Session
+
+```
+Enter action name: superheat
+
+Enter tests: 13:V
+Test 13: Base image 'test13.png' with icons ['iconV.png'] → PASS
+
+Enter tests: 14:A,B
+Test 14: Base image 'test14.png' with icons ['iconA.png', 'iconB.png'] → FAIL
+
+Enter tests: back
+```
+
+---
+
+# Special Commands
+
+### Back
+
+Return to action selection:
+
+```
+back
+```
+
+---
+
+### Exit
+
+Terminate the program:
+
+```
+exit
+```
+
+---
+
+### Clear Screen
+
+Clear the terminal output:
+
+```
+clear
+```
+
+---
+
+# Test Execution Logic
+
+Each test follows this process:
+
+1. Retrieve the base screenshot using the test ID.
+2. Retrieve the icon images using the icon letters.
+3. For each icon:
+
+   * Run `compare_icon_to_image_list()`
+4. If all icons are detected → PASS
+5. If any icon fails detection → FAIL
+
+Example output:
+
+```
+Test 13: Base image 'test13.png' with icons ['iconV.png'] → PASS
+```
+
+---
+
+# Advantages of the System
+
+This approach provides several benefits:
+
+### Simplified Testing
+
+Instead of writing long commands:
+
+```
+compare iconV.png with screenshots/test/test13.png
+```
+
+You simply write:
+
+```
+13:V
+```
+
+---
+
+### Faster Debugging
+
+Engineers can run many visual tests quickly without restarting scripts.
+
+---
+
+### Clear Test Results
+
+Each test prints a concise result:
+
+```
+PASS
+```
+
+or
+
+```
+FAIL
+```
+
+---
+
+### Action-Based Organization
+
+Each action has its own mapping file:
+
+```
+mappings/
+├─ superheat.json
+├─ cooling.json
+└─ all_superheat.json
+```
+
+---
+
+# Typical Workflow
+
+Step 1 — Generate mappings
+
+```
+python generate_mappings.py
+```
+
+Input:
+
+```
+superheat
+```
+
+---
+
+Step 2 — Run tests
+
+```
+python run_test.py
+```
+
+---
+
+Step 3 — Execute comparisons
+
+Example:
+
+```
+13:V
+14:A,B
+```
+
+---
+
+# Error Handling
+
+The scripts handle common errors such as:
+
+Missing environment variables
+
+```
+path_containing_LocallyAvailableTooling not set
+```
+
+Missing mappings
+
+```
+Mapping for 'superheat' not found
+```
+
+Invalid test IDs
+
+```
+Warning: test ID 20 not found in mapping
+```
+
+---
+
+# Extending the System
+
+Future improvements may include:
+
+* supporting more than 26 icon labels (AA, AB, AC)
+* exporting test summaries
+* automated CI pipeline integration
+* visual diff reports
+* batch execution from configuration files
+
+---
+
+# Summary
+
+The toolkit provides a lightweight but powerful system for verifying visual elements in screenshots.
+
+Key capabilities include:
+
+* automatic icon and test mapping
+* concise test commands
+* interactive execution
+* integration with existing image comparison tooling
+
+This system dramatically reduces the effort required to perform visual validation across large sets of action screenshots.
